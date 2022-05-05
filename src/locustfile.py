@@ -16,7 +16,7 @@ class Properties(HttpUser):
     def health(self):
         health_url = f"{self.host}:{PROPERTIES_PORT}/api/v1/health"
 
-        self.client.get(health_url)
+        self.client.get(health_url, name="properties-health")
 
     @task(1)
     def insert(self):
@@ -33,7 +33,8 @@ class Properties(HttpUser):
             "car":"PI-2211209-344301157FAE4482A2884266E088DC59"
         }
 
-        self.client.post(health_url, headers=headers, data=data, timeout=60000)
+        self.client.post(health_url, headers=headers, data=data,
+                         timeout=60000, name="properties-insert")
 
 
 ### API RESERVA LEGAL MAIS
@@ -44,4 +45,4 @@ class ReservaLegalMais(HttpUser):
 
     @task
     def health(self):
-        self.client.get("/api/v1/health")
+        self.client.get("/api/v1/health", name="reservalegal-health")
