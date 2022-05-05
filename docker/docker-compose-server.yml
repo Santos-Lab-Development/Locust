@@ -1,0 +1,12 @@
+version: "3.3"
+
+services:
+  locust_worker: &locust_base
+    image: southamerica-east1-docker.pkg.dev/santoslab/locust/locust:${TAG}
+    command: -f /mnt/locust/locustfile.py --worker --master-host locust_server
+
+  locust_server:
+    <<: *locust_base
+    ports:
+      - ${PORT}:8089
+    command: -f /mnt/locust/locustfile.py --master -H ${HOST_TEST}

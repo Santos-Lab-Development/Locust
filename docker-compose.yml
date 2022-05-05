@@ -1,0 +1,18 @@
+version: "3.3"
+
+services:
+  locust_worker: &locust_base
+    build: 
+      dockerfile: ./docker/Dockerfile
+      context: ./
+    volumes:
+      - ./src:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --worker --master-host locust_server
+
+  locust_server:
+    <<: *locust_base
+    volumes:
+      - ./src:/mnt/locust
+    ports:
+      - 8089:8089
+    command: -f /mnt/locust/locustfile.py --master -H http://35.209.201.68
